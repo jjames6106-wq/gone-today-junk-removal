@@ -44,6 +44,9 @@ ul.items{columns:2 220px;padding-left:1.1em;margin:0}
 .note{color:var(--muted);font-size:.95rem}
 .areas{display:flex;flex-wrap:wrap;gap:8px;padding:0;list-style:none;margin:0}
 .areas li{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.25em .85em}
+.est label{display:block;margin:0 0 12px;font-weight:600}
+.est select{display:block;width:100%;margin-top:6px;padding:10px;font:inherit;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+.estout{font-size:1.2rem;margin:8px 0}.estout b{font-family:var(--display);font-size:1.8rem;color:var(--sign)}
 footer{padding-block:28px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:.95rem}
 </style>
 </head><body>
@@ -58,7 +61,7 @@ footer{padding-block:28px 40px;border-top:1px solid var(--line);color:var(--mute
     <h1>Junk gone.<br>Today.</h1>
     <p>Furniture, appliances, cleanouts and heavy hauling. Text a photo and get a flat price in minutes.</p>
     <div class="cta">
-      <a class="btn" href="sms:+14707941471">Text a photo</a>
+      <a class="btn" href="#estimate">Get an instant price</a>
       <a class="btn alt" href="tel:+14707941471">Call now</a>
     </div>
   </div>
@@ -95,6 +98,26 @@ footer{padding-block:28px 40px;border-top:1px solid var(--line);color:var(--mute
     <p class="note">Our truck is a heavy-duty dually, so most jobs go in one trip. Final price depends on volume and the dump fee, and you hear it before we start.</p>
   </section>
 
+  <section id="estimate">
+    <h2>Instant estimate</h2>
+    <div class="card est">
+      <label>How much junk?
+        <select id="load">
+          <option value="79,99">One item (mattress, couch, appliance)</option>
+          <option value="97,150" selected>Small pile (about 1/8 truck)</option>
+          <option value="175,250">Quarter truck</option>
+          <option value="300,400">Half truck</option>
+          <option value="400,550">Full truck</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="stairs"> Stairs or carry from upstairs/basement</label>
+      <label><input type="checkbox" id="heavy"> Heavy items (piano, hot tub, safe-sized)</label>
+      <p class="estout">Estimated price: <b id="price">$97 – $150</b></p>
+      <p class="note">Final price is confirmed by photo before we come. Mattresses, tires and freon appliances may add a small disposal fee.</p>
+      <a class="btn" id="textq" href="sms:+14707941471">Text a photo for a firm price</a>
+    </div>
+  </section>
+
   <section>
     <h2>Why call us</h2>
     <div class="grid">
@@ -116,4 +139,16 @@ footer{padding-block:28px 40px;border-top:1px solid var(--line);color:var(--mute
     <p><b>Gone Today Junk Removal</b>, operated by I AM SOLUTIONS LLC. Text or call 470-794-1471.</p>
   </footer>
 </div>
+<script>
+(function(){
+  var load=document.getElementById('load'),st=document.getElementById('stairs'),hv=document.getElementById('heavy'),out=document.getElementById('price'),tq=document.getElementById('textq');
+  function calc(){
+    var r=load.value.split(',').map(Number),add=(st.checked?25:0)+(hv.checked?75:0);
+    var lo=r[0]+add,hi=r[1]+add;out.textContent='$'+lo+' – $'+hi;
+    var msg='Hi, I want a junk removal quote. '+load.options[load.selectedIndex].text+(st.checked?', stairs':'')+(hv.checked?', heavy items':'')+'. Estimate $'+lo+'-$'+hi+'. Photo attached. Address: ';
+    tq.href='sms:+14707941471?&body='+encodeURIComponent(msg);
+  }
+  [load,st,hv].forEach(function(e){e.addEventListener('change',calc)});calc();
+})();
+</script>
 </body></html>
